@@ -28,14 +28,18 @@ app.use((req, res, next) => {
 
 
 app.get('/', (req, res, next) => {
-   res.status(200).send('you reached the server...')
+   models.Blog
+      .findAll()
+      .then(blogs => {
+         res.status(200).json({blogs: blogs, message: 'request was successfull...'});
+      })
 })
 
 app.post('/create', (req, res, next) => {
    console.log('reached post route...')
    const blog = req.body;
    console.log(blog);
-   
+
    models.Blog
       .create({
          title: req.body.title,
@@ -50,8 +54,6 @@ app.post('/create', (req, res, next) => {
       message: 'you posted successfully...'
    })
 })
-
-
 
 app.listen(port, () => {
    console.log(`server running at port ${port}`)
