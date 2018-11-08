@@ -1,6 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { BlogService } from "../blog.service";
 import { Blog } from "../blog.model";
+import { Subscription } from 'rxjs'
+import { Router } from "@angular/router";
 
 
 @Component({
@@ -8,17 +10,27 @@ import { Blog } from "../blog.model";
    templateUrl: './blog-list.component.html',
    styleUrls: ['./blog-list.component.css']
 })
-export class BlogListComponent implements OnInit{
+export class BlogListComponent implements OnInit, OnDestroy{
    blogs: Blog[] = [];
+   blogSubscription: Subscription;
 
-   constructor(private blogService: BlogService) {}
+   constructor(private blogService: BlogService, private router: Router) {}
 
    ngOnInit() {
-      this.blogs = this.blogService.getAllBlogs();
-      if(this.blogs) {
-         for(let blog of this.blogs) {
-            console.log(blog)
-         }    
-      }
+      this.blogSubscription = this.blogService.getBlogUpdate()
+         .subscribe(blogs => {
+            this.blogs = blogs;
+      })
+
+      this.blogService.getAllBlogs()
    }
+
+   ngOnDestroy() {
+      this.blogSubscription.unsubscribe();
+   }
+
+   editBlog(blogId) {
+      this.router.navigate(['/create-edit', blogId])
+   }
+
 }

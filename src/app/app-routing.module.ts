@@ -6,7 +6,8 @@ import { BlogCreateEditComponent } from "./blogs/blog-create-edit/blog-create-ed
 
 const routes: Routes = [
    {path: '', component: BlogListComponent},
-   {path: 'create-edit', component: BlogCreateEditComponent}
+   {path: 'create-edit', component: BlogCreateEditComponent},
+   {path: 'create-edit/:id', component: BlogCreateEditComponent}
 ]
 
 @NgModule({

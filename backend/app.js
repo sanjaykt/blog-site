@@ -31,8 +31,17 @@ app.get('/', (req, res, next) => {
    models.Blog
       .findAll()
       .then(blogs => {
-         res.status(200).json({blogs: blogs, message: 'request was successfull...'});
+         res.status(200).json({blogs: blogs, message: 'GET request was successfull...'});
       })
+})
+
+app.get('/:id', (req, res, next) => {
+  const id = req.params.id;
+  models.Blog
+    .findById(id)
+    .then((blog) => {
+      res.status(200).json({blog: blog});
+    })
 })
 
 app.post('/create', (req, res, next) => {
@@ -53,6 +62,24 @@ app.post('/create', (req, res, next) => {
    res.json({
       message: 'you posted successfully...'
    })
+})
+
+app.put('/:id', (req, res, next) => {
+  console.log("updated method is called...")
+  console.log(req.body)
+  const id = req.params.id;
+  models.Blog
+    .findById(id)
+    .then(blog => {
+      blog.title = req.body.title,
+      blog.subtitle = req.body.subtitle,
+      blog.content = req.body.content,
+      blog.save();
+  })
+
+  res.status(201).json({
+    message: 'notepad updated successfully...'
+  })
 })
 
 app.listen(port, () => {

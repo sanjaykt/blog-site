@@ -1,45 +1,59 @@
 import { Injectable } from "@angular/core";
 import { Blog } from "./blog.model";
+import { HttpClient } from "@angular/common/http";
+import { Subject } from 'rxjs'
+import { map } from 'rxjs/operators'
 
-@Injectable({providedIn: 'root'})
+
+@Injectable({ providedIn: 'root' })
 export class BlogService {
-   private blogs: Blog[] = [];
+  private blogs: Blog[] = [];
+  private url: string = 'http://localhost:3000/';
+  private blogUpdate = new Subject<Blog[]>();
 
-   saveBlog(title:string, subtitle:string, content: string) {
-      let id: string = this.generateSlug(title);
-      this.blogs.push({
-         id: id,
-         title: title,
-         subtitle: subtitle,
-         content: content
-       });
-   }
+  constructor(private http: HttpClient) { }
 
-   getAllBlogs(): Blog[] {
-      return this.blogs;
-   }
+  getBlogUpdate() {
+    return this.blogUpdate.asObservable();
+  }
 
-   getBlog(id: string) {
-      // this.blogs.find(blog => blog.id === id)
-      return this.blogs.find(blog => blog.id === id)
-   }
+  saveBlog(title: string, subtitle: string, content: string) {
+    this.http
+      .post<{ message: string }>(this.url + '/create', { title: title, subtitle: subtitle, content: content })
+      .subscribe((response) => {
+        console.log(response.message);
+      })
+  }
 
-   generateSlug (title): string {
-      // clean the title of the any white space
-      let count = 0;
-      let slug: string = title.toLowerCase().replace(/\s+/g, '-');
-       // returns array of all the same titles
-       for(let blog of this.blogs) {
-          if(blog.id.substring(0, slug.length) === slug) {
-            count++;
+  getAllBlogs() {
+    this.http
+      .get<{ blogs: any, message: string }>(this.url)
+      .pipe(map(data => {
+        console.log(data.message);
+        return data.blogs.map(blog => {
+          return {
+            id: blog.id,
+            title: blog.title,
+            subtitle: blog.subtitle,
+            content: blog.content,
           }
-       }
-        
-       // checking the lenght of the array and add increameting number to slug
-      // title + number
-      if (count > 0) {
-        slug = slug + count;
-      }
-       return slug;
-    }
+        })
+      }))
+      .subscribe(transformedData => {
+        this.blogs = transformedData;
+        this.blogUpdate.next([...this.blogs]);
+      })
+  }
+
+  getBlog(blogId) {
+    return this.http.get<{blog: Blog}>(this.url + blogId)
+  }
+
+  updateBlog(blogId, blog: Blog) {
+    this.http
+      .put(this.url + blogId, blog)
+      .subscribe(result => {
+        console.log(result);
+      })
+  }
 }
