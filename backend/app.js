@@ -1,5 +1,7 @@
 const express = require('express');
 const models = require('./models')
+const blogRoutes = require('./routes/blogs')
+const userRoutes = require('./routes/user')
 
 const app = express();
 const bodyParser = require('body-parser');
@@ -26,61 +28,10 @@ app.use((req, res, next) => {
    next(); //without this like, the execute with stop
  });
 
+ app.use(blogRoutes);
+ app.use(userRoutes);
 
-app.get('/', (req, res, next) => {
-   models.Blog
-      .findAll()
-      .then(blogs => {
-         res.status(200).json({blogs: blogs, message: 'GET request was successfull...'});
-      })
-})
 
-app.get('/:id', (req, res, next) => {
-  const id = req.params.id;
-  models.Blog
-    .findById(id)
-    .then((blog) => {
-      res.status(200).json({blog: blog});
-    })
-})
-
-app.post('/create', (req, res, next) => {
-   console.log('reached post route...')
-   const blog = req.body;
-   console.log(blog);
-
-   models.Blog
-      .create({
-         title: req.body.title,
-         subtitle: req.body.subtitle,
-         content: req.body.content
-      })
-      .then(() => {
-         console.log('successfully posted the blog')
-   });
-
-   res.json({
-      message: 'you posted successfully...'
-   })
-})
-
-app.put('/:id', (req, res, next) => {
-  console.log("updated method is called...")
-  console.log(req.body)
-  const id = req.params.id;
-  models.Blog
-    .findById(id)
-    .then(blog => {
-      blog.title = req.body.title,
-      blog.subtitle = req.body.subtitle,
-      blog.content = req.body.content,
-      blog.save();
-  })
-
-  res.status(201).json({
-    message: 'notepad updated successfully...'
-  })
-})
 
 app.listen(port, () => {
    console.log(`server running at port ${port}`)

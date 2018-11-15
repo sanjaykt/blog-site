@@ -17,20 +17,19 @@ export class BlogListComponent implements OnInit, OnDestroy{
    constructor(private blogService: BlogService, private router: Router) {}
 
    ngOnInit() {
+      this.blogService.getAllBlogs()
+      
       this.blogSubscription = this.blogService.getBlogUpdate()
          .subscribe(blogs => {
             this.blogs = blogs;
       })
-
-      this.blogService.getAllBlogs()
    }
-
-   ngOnDestroy() {
-      this.blogSubscription.unsubscribe();
-   }
-
+   
    editBlog(blogId) {
       this.router.navigate(['/create-edit', blogId])
    }
-
+   
+   ngOnDestroy() {
+      this.blogSubscription.unsubscribe();
+   }
 }

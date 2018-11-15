@@ -31,6 +31,12 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+var user = db['User'];
+var blog = db['Blog'];
+
+user.hasMany(blog,{ foreignKey: 'userId' });
+blog.belongsTo(user,{ foreignKey: 'userId' });
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

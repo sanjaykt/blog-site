@@ -19,9 +19,10 @@ export class BlogService {
 
   saveBlog(title: string, subtitle: string, content: string) {
     this.http
-      .post<{ message: string }>(this.url + '/create', { title: title, subtitle: subtitle, content: content })
+      .post<{ message: string }>(this.url + 'create', { title: title, subtitle: subtitle, content: content })
       .subscribe((response) => {
         console.log(response.message);
+        this.getAllBlogs();
       })
   }
 
@@ -54,6 +55,7 @@ export class BlogService {
       .put(this.url + blogId, blog)
       .subscribe(result => {
         console.log(result);
+        this.getAllBlogs();
       })
   }
 }

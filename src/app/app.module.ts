@@ -8,8 +8,10 @@ import { BlogListComponent } from './blogs/blog-list/blog-list.component';
 import { BlogCreateEditComponent } from './blogs/blog-create-edit/blog-create-edit.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from './header/header.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './login/login.component';
+import { SignupComponent } from './signup/signup.component';
 
 
 @NgModule({
@@ -17,7 +19,9 @@ import { HttpClientModule } from '@angular/common/http';
     AppComponent,
     HeaderComponent,
     BlogListComponent,
-    BlogCreateEditComponent
+    BlogCreateEditComponent,
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
@@ -27,6 +31,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatCardModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
+    FormsModule,
     MatFormFieldModule,
     MatButtonModule,
     MatToolbarModule,

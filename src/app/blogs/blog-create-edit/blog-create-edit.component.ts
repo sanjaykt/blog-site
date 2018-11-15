@@ -18,10 +18,11 @@ export class BlogCreateEditComponent implements OnInit{
    constructor(public blogService: BlogService, 
                private router: Router,
                private route: ActivatedRoute) {
-      blogService.getAllBlogs();
+      // blogService.getAllBlogs();
    }
 
    ngOnInit () {
+      this.blogService.getAllBlogs();
       this.isLoading = false;
       this.blogForm = new FormGroup({
          'title': new FormControl(null, {validators: [Validators.required, Validators.minLength(3)]}),
@@ -64,6 +65,4 @@ export class BlogCreateEditComponent implements OnInit{
       }
       this.router.navigate(['/'])
    }
-
-
 }
