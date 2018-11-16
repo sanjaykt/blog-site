@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const models = require('../models');
+const checkAuth = require('../middleware/check-auth')
 
 router.get('/', (req, res, next) => {
    models.Blog
@@ -19,11 +20,7 @@ router.get('/:id', (req, res, next) => {
     })
 })
 
-router.post('/create', (req, res, next) => {
-   console.log('reached post route...')
-   const blog = req.body;
-   console.log(blog);
-
+router.post('/create', checkAuth, (req, res, next) => {
    models.Blog
       .create({
          title: req.body.title,
@@ -39,9 +36,7 @@ router.post('/create', (req, res, next) => {
    })
 })
 
-router.put('/:id', (req, res, next) => {
-  console.log("updated method is called...")
-  console.log(req.body)
+router.put('/:id', checkAuth, (req, res, next) => {
   const id = req.params.id;
   models.Blog
     .findById(id)

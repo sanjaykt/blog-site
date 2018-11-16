@@ -3,6 +3,7 @@ import { BlogService } from "../blog.service";
 import { Blog } from "../blog.model";
 import { Subscription } from 'rxjs'
 import { Router } from "@angular/router";
+import { AuthService } from "src/app/auth/auth.service";
 
 
 @Component({
@@ -13,8 +14,11 @@ import { Router } from "@angular/router";
 export class BlogListComponent implements OnInit, OnDestroy{
    blogs: Blog[] = [];
    blogSubscription: Subscription;
+   userEmail: string;
 
-   constructor(private blogService: BlogService, private router: Router) {}
+   constructor(private blogService: BlogService, 
+               private router: Router,
+               private authService: AuthService) {}
 
    ngOnInit() {
       this.blogService.getAllBlogs()
@@ -23,6 +27,12 @@ export class BlogListComponent implements OnInit, OnDestroy{
          .subscribe(blogs => {
             this.blogs = blogs;
       })
+      this.userEmail = 'No one is logged in...'
+      let email =  this.authService.getUserEmail();
+      if(email) {
+            this.userEmail = email;
+      }
+      console.log(this.userEmail);
    }
    
    editBlog(blogId) {
