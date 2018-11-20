@@ -8,12 +8,14 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
+  public isLoading: boolean = false;
 
   constructor(private authService: AuthService) { }
 
   ngOnInit() {
   }
   onSignup(form: NgForm) {
+    this.isLoading = true;
     if (form.invalid) {
       return;
     }

@@ -3,43 +3,35 @@ import { BlogService } from "../blog.service";
 import { Blog } from "../blog.model";
 import { Subscription } from 'rxjs'
 import { Router } from "@angular/router";
-import { AuthService } from "src/app/auth/auth.service";
 
 
 @Component({
-   selector: 'app-blog-list',
-   templateUrl: './blog-list.component.html',
-   styleUrls: ['./blog-list.component.css']
+      selector: 'app-blog-list',
+      templateUrl: './blog-list.component.html',
+      styleUrls: ['./blog-list.component.css']
 })
-export class BlogListComponent implements OnInit, OnDestroy{
-   blogs: Blog[] = [];
-   blogSubscription: Subscription;
-   userEmail: string;
+export class BlogListComponent implements OnInit, OnDestroy {
+      blogs: Blog[] = [];
+      blogSubscription: Subscription;
+      userEmail: string;
 
-   constructor(private blogService: BlogService, 
-               private router: Router,
-               private authService: AuthService) {}
+      constructor(private blogService: BlogService,
+            private router: Router) { }
 
-   ngOnInit() {
-      this.blogService.getAllBlogs()
-      
-      this.blogSubscription = this.blogService.getBlogUpdate()
-         .subscribe(blogs => {
-            this.blogs = blogs;
-      })
-      this.userEmail = 'No one is logged in...'
-      let email =  this.authService.getUserEmail();
-      if(email) {
-            this.userEmail = email;
+      ngOnInit() {
+            this.blogService.getAllBlogs()
+
+            this.blogSubscription = this.blogService.getBlogUpdate()
+                  .subscribe(blogs => {
+                        this.blogs = blogs;
+                  })
       }
-      console.log(this.userEmail);
-   }
-   
-   editBlog(blogId) {
-      this.router.navigate(['/create-edit', blogId])
-   }
-   
-   ngOnDestroy() {
-      this.blogSubscription.unsubscribe();
-   }
+
+      editBlog(blogId) {
+            this.router.navigate(['/create-edit', blogId])
+      }
+
+      ngOnDestroy() {
+            this.blogSubscription.unsubscribe();
+      }
 }

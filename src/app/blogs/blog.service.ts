@@ -30,7 +30,6 @@ export class BlogService {
     this.http
       .get<{ blogs: any, message: string }>(this.url)
       .pipe(map(data => {
-        console.log(data.message);
         return data.blogs.map(blog => {
           return {
             id: blog.id,

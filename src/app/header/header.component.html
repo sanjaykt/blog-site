@@ -2,16 +2,16 @@
    <span><a routerLink="/" class="title">Blog List</a></span>
    <span class="spacer"></span>
    <ul>
-      <li>
+      <li *ngIf="userIsAuthenticated">
          <a mat-button routerLink="/create-edit" routerLinkActive="mat-accent">create</a>
       </li>
-      <li> 
+      <li *ngIf="!userIsAuthenticated"> 
          <a mat-button routerLink="/login" routerLinkActive="mat-accent">login</a>
       </li>
-      <li>
+      <li *ngIf="!userIsAuthenticated">
          <a mat-button routerLink="/signup" routerLinkActive="mat-accent">signup</a>
       </li>
-      <li>
+      <li *ngIf="userIsAuthenticated">
          <button mat-button (click)="onLogout()">logout</button>
        </li>
    </ul>
